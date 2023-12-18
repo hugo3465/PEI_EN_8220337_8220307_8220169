@@ -1,0 +1,3 @@
+Best practices mongo: https://www.mongodb.com/basics/best-practices
+	Sobretudo o 3: Try embedding and referencing
+MongoDB Schema Design Best Practices: https://www.youtube.com/watch?v=QAqK-R9HUhc

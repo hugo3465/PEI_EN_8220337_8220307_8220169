@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns="http://www.w3.org/2001/XMLSchema/productRules"
+    targetNamespace="http://www.w3.org/2001/XMLSchema/productRules">
+
+
+    <xs:simpleType name="typeNome">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="3" />
+            <xs:maxLength value="10" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:element name="products">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="product" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="product_code" type="xs:string" />
+                            <xs:element name="brand" type="typeNome" />
+                            <xs:element name="model" type="typeNome" />
+                            <xs:element name="current_price" type="xs:decimal" />
+                            <xs:element name="category">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="price_range">
+                                            <xs:simpleType>
+                                                <xs:restriction base="xs:string">
+                                                    <xs:enumeration value="Budget" />
+                                                    <xs:enumeration value="Mid-Range" />
+                                                    <xs:enumeration value="High-End" />
+                                                </xs:restriction>
+                                            </xs:simpleType>
+                                        </xs:element>
+                                        <xs:element name="performance">
+                                            <xs:simpleType>
+                                                <xs:restriction base="xs:string">
+                                                    <xs:enumeration value="Basic" />
+                                                    <xs:enumeration value="Standard" />
+                                                    <xs:enumeration value="High" />
+                                                    <xs:enumeration value="Gaming" />
+                                                </xs:restriction>
+                                            </xs:simpleType>
+                                        </xs:element>
+                                        <xs:element name="camera_quality">
+                                            <xs:simpleType>
+                                                <xs:restriction base="xs:string">
+                                                    <xs:enumeration value="Basic" />
+                                                    <xs:enumeration value="Good" />
+                                                    <xs:enumeration value="Pro" />
+                                                </xs:restriction>
+                                            </xs:simpleType>
+                                        </xs:element>
+                                        <xs:element name="screen_size">
+                                            <xs:simpleType>
+                                                <xs:restriction base="xs:string">
+                                                    <xs:enumeration value="Small" />
+                                                    <xs:enumeration value="Medium" />
+                                                    <xs:enumeration value="Large" />
+                                                </xs:restriction>
+                                            </xs:simpleType>
+                                        </xs:element>
+                                        <xs:element name="battery_capacity">
+                                            <xs:simpleType>
+                                                <xs:restriction base="xs:string">
+                                                    <xs:enumeration value="Short" />
+                                                    <xs:enumeration value="Average" />
+                                                    <xs:enumeration value="Long" />
+                                                </xs:restriction>
+                                            </xs:simpleType>
+                                        </xs:element>
+                                        <xs:element name="storage_capacity">
+                                            <xs:simpleType>
+                                                <xs:restriction base="xs:string">
+                                                    <xs:enumeration value="Low" />
+                                                    <xs:enumeration value="Medium" />
+                                                    <xs:enumeration value="High" />
+                                                </xs:restriction>
+                                            </xs:simpleType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

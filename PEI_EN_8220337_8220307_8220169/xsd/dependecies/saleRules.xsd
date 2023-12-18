@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns="http://www.w3.org/2001/XMLSchema/saleRules"
+    targetNamespace="http://www.w3.org/2001/XMLSchema/saleRules">
+
+    <xs:simpleType name="dataType">
+        <xs:restriction base="xs:date">
+            <xs:pattern value="[0-9]{2}/[0-9]{2}/[0-9]/{4}"></xs:pattern>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:element name="sales">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="sale" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="invoice_code" type="xs:string" />
+                            <xs:element name="sale_date" type="dataType" />
+                            <xs:element name="customer_code" type="xs:string" />
+                            <xs:element name="total_sale_value" type="xs:decimal" />
+                            <xs:element name="sale_lines">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="sale_line" maxOccurs="unbounded">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element name="line_number" type="xs:integer" />
+                                                    <xs:element name="product_code" type="xs:string" />
+                                                    <xs:element name="quantity_sold"
+                                                        type="xs:integer" />
+                                                    <xs:element name="total_line_value"
+                                                        type="xs:decimal" />
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="summary_sales">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="num_different_products" type="xs:integer" />
+                <xs:element name="total_sales" type="xs:integer" />
+                <xs:element name="num_different_customers" type="xs:integer" />
+                <!-- Número de vendas por categoria de produto -->
+                <xs:element name="sales_by_category">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="price_range">
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                        <xs:enumeration value="Budget" />
+                                        <xs:enumeration value="Mid-Range" />
+                                        <xs:enumeration value="High-End" />
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element name="performance">
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                        <xs:enumeration value="Basic" />
+                                        <xs:enumeration value="Standard" />
+                                        <xs:enumeration value="High" />
+                                        <xs:enumeration value="Gaming" />
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element name="camera_quality">
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                        <xs:enumeration value="Basic" />
+                                        <xs:enumeration value="Good" />
+                                        <xs:enumeration value="Pro" />
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element name="screen_size">
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                        <xs:enumeration value="Small" />
+                                        <xs:enumeration value="Medium" />
+                                        <xs:enumeration value="Large" />
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element name="battery_capacity">
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                        <xs:enumeration value="Short" />
+                                        <xs:enumeration value="Average" />
+                                        <xs:enumeration value="Long" />
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element name="storage_capacity">
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                        <xs:enumeration value="Low" />
+                                        <xs:enumeration value="Medium" />
+                                        <xs:enumeration value="High" />
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

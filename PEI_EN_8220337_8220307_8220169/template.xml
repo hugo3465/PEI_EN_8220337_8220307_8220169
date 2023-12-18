@@ -1,0 +1,111 @@
+<!-- 
+    Dúvidas:
+        - Não sei se os produtos e os clientes têm de estar dentro das vendas
+
+-->
+
+<!-- Relatório de apenas 1 mês -->
+<report>
+    <general_information>
+        <nif>NUMERO_DO_NIF</nif>
+        <name>NOME_DO_PARCEIRO</name>
+        <address>MORADA_DO_PARCEIRO</address>
+        <fiscal_year>ANO_FISCAL</fiscal_year> <!-- ano fiscal -  ano a que se refere o documento -->
+        <reference_month>MES_REFERENCIA</reference_month> <!-- mês referencial - mês a que se refere o documento -->
+    </general_information>
+
+    <!-- Lista de todos os clientes envolvidos nas vendas -->
+    <customers>
+        <customer>
+            <customer_code>CODIGO_CLIENTE</customer_code>
+            <first_name>FULANO</first_name>
+            <last_name>CICLANO</last_name>
+            <email>EMAIL_DO_CLIENTE</email> <!-- se o cliente não forneceu email, ent tem que estar como desconhecido-->
+            <address>
+                <country>PAIS_CLIENTE</country>
+                <city>CIDADE_CLIENTE</city>
+                <postal_code>CODIGO_POSTAL_CLIENTE</postal_code>
+            </address>
+            <customer_type>TIPO_DE_CLIENTE</customer_type> <!-- new, regular, premium (no enunciado tem ) -->
+            <purchases_last_3_years>NUMERO_DE_COMPRAS</purchases_last_3_years>
+            <total_purchase_value>VALOR_TOTAL_COMPRAS</total_purchase_value>
+        </customer>
+        <!-- Outros clientes... -->
+    </customers>
+
+    <!-- Lista de todos os produtos comprados -->
+    <products>
+        <product>
+            <product_code>CODIGO_PRODUTO</product_code>
+            <brand>MARCA_PRODUTO</brand>
+            <model>MODELO_PRODUTO</model>
+            <current_price>PRECO_PRODUTO</current_price>
+            <category>
+                <price_range>GAMA_DE_PRECOS</price_range> <!--  Budget, Mid-Range e High-End  -->
+                <performance>DESEMPENHO_PRODUTO</performance> <!--  Basic, Standard, High e Gaming -->
+                <camera_quality>QUALIDADE_CAMERA</camera_quality> <!-- Basic, Good e Pro -->
+                <screen_size>TAMANHO_ECRAN</screen_size> <!--  Small, Medium e Large -->
+                <battery_capacity>CAPACIDADE_BATERIA</battery_capacity> <!--  Short, Average e Long -->
+                <storage_capacity>CAPACIDADE_ARMAZENAMENTO</storage_capacity> <!--  Low, Medium e High -->
+            </category>
+        </product>
+        <!-- Outros produtos... -->
+    </products>
+
+    <!-- Informações de vendas -->
+    <sales>
+        <!-- Isto tem de estar num conjunto de vendas -->
+        <sale>
+            <invoice_code>CODIGO_FATURA</invoice_code>
+            <sale_date>DATA_VENDA</sale_date>
+            <customer_code>CODIGO_CLIENTE</customer_code>
+            <total_sale_value>VALOR_TOTAL_VENDA</total_sale_value>
+
+            <sale_lines> <!-- ? -->
+                <sale_line> <!-- ? -->
+                    <line_number>NUMERO_LINHA</line_number>
+                    <product_code>CODIGO_PRODUTO</product_code> <!-- repetido, pode-se reaproveitar o tipo -->
+                    <quantity_sold>QUANTIDADE_PRODUTO</quantity_sold>
+                    <total_line_value>VALOR_TOTAL_LINHA</total_line_value>
+                </sale_line>
+                <!-- Outras linhas de venda... -->
+            </sale_lines>
+        </sale>
+        <!-- Outras vendas... -->
+    </sales>
+
+    <!-- Informações resumidas -->
+    <summary_sales>
+        <num_different_products>NUM_PRODUTOS_DIFF</num_different_products>
+        <total_sales>TOTAL_VENDAS</total_sales>
+        <num_different_customers>NUM_CLIENTES_DIFF</num_different_customers>
+        <!-- Número de vendas por categoria de produto -->
+        <sales_by_category>
+            <price_range>GAMA_DE_PRECOS</price_range> <!--  Budget, Mid-Range e High-End  -->
+            <performance>DESEMPENHO</performance> <!--  Basic, Standard, High e Gaming -->
+            <camera_quality>QUALIDADE_CAMERA</camera_quality> <!-- Basic, Good e Pro -->
+            <screen_size>TAMANHO_ECRAN</screen_size> <!--  Small, Medium e Large -->
+            <battery_capacity>CAPACIDADE_BATERIA</battery_capacity> <!--  Short, Average e Long -->
+            <storage_capacity>CAPACIDADE_ARMAZENAMENTO</storage_capacity> <!--  Low, Medium e High -->
+        </sales_by_category>
+    </summary_sales>
+
+    <!-- Informações de devoluções -->
+    <returns>
+        <!-- Mesma estrutura que as vendas, adicionando informações específicas de devolução -->
+
+        <!-- Informação geral outra vez -->
+
+        <!-- A lista de produtos envolvidos nas vendas com a mesma composição apresentada anteriormente para as vendas. -->
+        <!-- O código e a data da fatura associada a cada devolução, assim como todos os produtos  devolvidos, identificados pelo seu id. -->
+        <!-- Para cada devolução deverá ser apresentado o número de dias que passaram até à devolução do produto -->
+        <!-- Indicador de devolução precoce, isto é, se o produto foi ou não devolvido no prazo de 3 dias após a compra -->
+
+        <!--
+            Deverá ser apresentada informação resumida sobre o conjunto de devoluções incluídas no 
+            documento, o que inclui: Número de produtos diferentes, número de devoluções por categoria 
+            de produto (Gama de preços, Desempenho, Qualidade da Câmara Frontal, Tamanho de Ecrã, 
+            Capacidade de Bateria e Capacidade de armazenamento).
+        -->
+    </returns>
+</report>
