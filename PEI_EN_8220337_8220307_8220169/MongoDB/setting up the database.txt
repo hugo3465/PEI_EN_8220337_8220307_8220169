@@ -1,0 +1,21 @@
+// create database
+use BdPeiTP
+
+// ceate collections for storing the content from the csv files, these collections will be deleted, after their content goes to the final collections
+db.createCollection("addres_csv");
+db.createCollection("category_csv");
+db.createCollection("city_csv");
+db.createCollection("country_csv");
+db.createCollection("customer_csv");
+db.createCollection("product_csv");
+db.createCollection("returns_csv");
+db.createCollection("sales_header_csv");
+db.createCollection("sales_lines_csv");
+db.createCollection("sub_category_csv");
+db.createCollection("sub_category_product_csv");
+
+// Create collections for storing content from the CSV collections, but optimized for MongoDB
+db.createCollection("customer");
+db.createCollection("product");
+db.createCollection("returns");
+db.createCollection("sales");
