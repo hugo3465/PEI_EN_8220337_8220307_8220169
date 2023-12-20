@@ -1,0 +1,65 @@
+/**
+ * Pressupostos:
+ *  * Ter previamente executado as pipelines dos clientes e dos produtos e vendas
+ */
+use('BdPeiTP');
+
+var returns = db.returns_csv.aggregate([
+    {
+        $lookup : {
+            from : "product", // Nome da tabela que será unida
+            localField : "product_id", // Campo do documento de consulta que será usado para combinar com o campo exportado
+            foreignField : "product_id", // Campo do documento de consulta que será usado para combinar com o campo exportado
+            as: "product"
+        }
+    },
+    {
+        $unwind: "$product"
+    },
+    {
+        $lookup: {
+          from: "sales",
+          localField: "invoice_id",
+          foreignField: "invoice_id",
+          as: "sale"
+        }
+    },
+    {
+        $unwind: "$sale"
+    },
+    {
+        $project: {
+            _id: 1,
+            invoice_id: 1,
+            product_id: 1,
+            date: 1,
+            customer: {
+                _id: "$sale.customer._id",
+                customer_id: "$sale.customer.customer_id",
+                first_name: "$sale.customer.first_name",
+                last_name: "$sale.customer.last_name",
+                address_info: {
+                    country: "$sale.customer.address_info.country",
+                    city: "$sale.customer.address_info.city",
+                    postal_code: "$sale.customer.address_info.postal_code"
+                }
+            },
+            product: {
+                _id: 1,
+                brand: 1,
+                categories: 1
+            },
+            sale: {
+                invoice_id: 1,
+                date: 1
+            }
+        }
+    }
+])
+
+var bulkInsert = [];
+returns.forEach(function(returnItem) {
+    bulkInsert.push(returnItem) // inserir a devolução dentro do array
+});
+// guardar o array todo na coleção "returns" no fim de iterar
+db.returns.insertMany(bulkInsert);
