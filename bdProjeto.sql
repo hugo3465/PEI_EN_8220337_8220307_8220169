@@ -9,12 +9,12 @@ CREATE TABLE product (
     list_price           float,
 
     -- O pedro tinha razão nesta
-    category {              Object
+    categories [            array
         name                varchar(255),   
-        sub_categories {    array
+        sub_categories [    array
             name            varchar(255),
-        }
-    } 
+        ]
+    ]
 
     brand               varchar(255),
     model               varchar(255),
@@ -71,12 +71,12 @@ CREATE TABLE sales (
     product {
         product_id              int,
         brand                   varchar(255),
-        category {              Object
+        categories [            array
             name                varchar(255),   
-            sub_categories {    array
+            sub_categories [    array
                 name            varchar(255),
-            }
-        }        
+            ]
+        ]      
     }
 
     sales_lines: {          array -- tinha outro nome isto
@@ -112,12 +112,12 @@ CREATE TABLE returns (
     product {
         product_id              int, -- id do csv
         brand                   varchar(255),
-        category {              Object
+        categories [            array
             name                varchar(255),   
-            sub_categories {    array
+            sub_categories [    array
                 name            varchar(255),
-            }
-        }        
+            ]
+    ]        
     }
 
 );

@@ -1,0 +1,116 @@
+use('BdPeiTP');
+
+// product_csv, sub_category_product_csv, sub_category_csv, category_csv -> para Products
+var prodducts = db.product_csv.aggregate([
+    {
+        $lookup: {
+            from: "sub_category_product_csv",
+            localField: "id",
+            foreignField: "product_id",
+            as: "sub_categories"
+        }
+    },
+    {
+        $unwind: {
+            path: "$sub_categories",
+            preserveNullAndEmptyArrays: true
+        }
+    },
+    {
+        $lookup: {
+            from: "sub_category_csv",
+            localField: "sub_categories.sub_category_id",
+            foreignField: "id",
+            as: "sub_category"
+        }
+    },
+    {
+        $unwind: {
+            path: "$sub_category",
+            preserveNullAndEmptyArrays: true
+        }
+    },
+    {
+        $lookup: {
+            from: "category_csv",
+            localField: "sub_category.category_id",
+            foreignField: "id",
+            as: "category"
+        }
+    },
+    {
+        $unwind: "$category"
+    },
+    {
+        $group: {
+            _id: "$_id",
+            product_id: { $first: "$id" },
+            list_price: { $first: "$list_price" },
+            brand: { $first: "$brand" },
+            model: { $first: "$model" },
+            "5g": { $first: "$5g" },
+            processor_brand: { $first: "$processor_brand" },
+            battery_capacity: { $first: "$battery_capacity" },
+            fast_charging: { $first: "$fast_charging" },
+            ram_capacity: { $first: "$ram_capacity" },
+            internal_memory: { $first: "$internal_memory" },
+            screen_size: { $first: "$screen_size" },
+            os: { $first: "$os" },
+            primary_camera: { $first: "$primary_camera" },
+            categories: {
+                $push: {
+                    name: "$category.name",
+                    sub_categories: ["$sub_category.name"]
+                    
+                }
+            }
+        }
+    },
+    {
+        $group: {
+            _id: "$_id",
+            product_id: { $first: "$product_id" },
+            list_price: { $first: "$list_price" },
+            brand: { $first: "$brand" },
+            model: { $first: "$model" },
+            "5g": { $first: "$5g" },
+            processor_brand: { $first: "$processor_brand" },
+            battery_capacity: { $first: "$battery_capacity" },
+            fast_charging: { $first: "$fast_charging" },
+            ram_capacity: { $first: "$ram_capacity" },
+            internal_memory: { $first: "$internal_memory" },
+            screen_size: { $first: "$screen_size" },
+            os: { $first: "$os" },
+            primary_camera: { $first: "$primary_camera" },
+            categories: { $first: "$categories" }
+        }
+    },
+    {
+        $project: {
+            _id: 1,
+            product_id: 1,
+            list_price: 1,
+            brand: 1,
+            model: 1,
+            "5g": 1,
+            processor_brand: 1,
+            battery_capacity: 1,
+            fast_charging: 1,
+            ram_capacity: 1,
+            internal_memory: 1,
+            screen_size: 1,
+            os: 1,
+            primary_camera: 1,
+            categories: 1,        
+        }
+    }
+])
+
+
+var bulkInsert = [];
+prodducts.forEach(function(product) {
+    bulkInsert.push(product) // inserir o produto dentro do array
+});
+
+// guardar o array todo na coleção "products" no fim de iterar
+db.product.insertMany(bulkInsert);
