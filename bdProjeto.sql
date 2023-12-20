@@ -68,20 +68,21 @@ CREATE TABLE sales (
     }
 
     -- infomração importante sobre os produtos para pesquisas
-    product {
-        product_id              int,
-        brand                   varchar(255),
-        categories [            array
-            name                varchar(255),   
-            sub_categories [    array
-                name            varchar(255),
-            ]
-        ]      
-    }
+    
 
     sales_lines: {          array -- tinha outro nome isto
         product_mongo_id    Object  -- _id from the product
         product_id          int, -- id from the csv
+        product {
+            product_id              int,
+            brand                   varchar(255),
+            categories [            array
+                name                varchar(255),   
+                sub_categories [    array
+                    name            varchar(255),
+                ]
+            ]      
+        }
         total_with_vat      float,
         quantity            int,
     }            

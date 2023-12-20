@@ -58,7 +58,7 @@ var prodducts = db.product_csv.aggregate([
             os: { $first: "$os" },
             primary_camera: { $first: "$primary_camera" },
             categories: {
-                $push: {
+                $addToSet: {
                     name: "$category.name",
                     sub_categories: ["$sub_category.name"]
                     
@@ -108,7 +108,7 @@ var prodducts = db.product_csv.aggregate([
 
 
 var bulkInsert = [];
-prodducts.forEach(function(product) {
+products.forEach(function(product) {
     bulkInsert.push(product) // inserir o produto dentro do array
 });
 

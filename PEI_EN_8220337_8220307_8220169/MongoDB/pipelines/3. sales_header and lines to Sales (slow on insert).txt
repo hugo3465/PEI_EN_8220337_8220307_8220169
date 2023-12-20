@@ -1,0 +1,67 @@
+/**
+ * Pressupostos:
+ *  * Ter previamente executado as pipelines dos clientes e dos produtos
+ */
+use('BdPeiTP');
+
+var sales = db.sales_header_csv.aggregate([
+    {
+        $lookup: {
+          from: "customer",
+          localField: "customer_id",
+          foreignField: "customer_id",
+          as: "customer"
+        }
+    },
+    {
+        $unwind: "$customer"
+    },
+    {
+        $lookup: {
+          from: "sales_lines_csv",
+          localField: "invoice_id",
+          foreignField: "invoice_id",
+          as: "sales_lines"
+        }
+    },
+    {
+        $lookup: {
+          from: "product",
+          localField: "sales_lines.product_id",
+          foreignField: "product_id",
+          as: "products_on_sales"
+        }
+    },
+    {
+        $project: {
+            _id: 1,
+            invoice_id: 1,
+            date: 1,
+            customer: {
+                _id: 1,
+               customer_id: 1,
+               first_name: 1,
+               last_name: 1,
+               address_info: {
+                    country: 1,
+                    city: 1,
+                    postal_code: 1
+               }
+            },
+            sales_lines: 1,
+            products_on_sales: {
+                _id: 1,
+                product_id: 1,
+                brand: 1,
+                categories: 1
+            }
+        }
+    }
+])
+
+var bulkInsert = [];
+sales.forEach(function(sale) {
+    bulkInsert.push(sale) // inserir a venda dentro do array
+});
+// guardar o array todo na coleção "products" no fim de iterar
+db.sales.insertMany(bulkInsert);
