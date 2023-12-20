@@ -1,0 +1,82 @@
+// Base de dados que se vai usar
+use('BdPeiTP');
+
+var customers = db.customer_csv.aggregate([
+    {
+        $lookup: {
+            from: "address_csv",
+            localField: "address_id",
+            foreignField: "address_id",
+            as: "address_info",
+        }
+    },
+    {
+        $unwind: "$address_info" // sem isto o address_info ia ser um arrray
+    },
+    {
+        $lookup: {
+            from: "city_csv",
+            localField: "address_info.city_id",
+            foreignField: "city_id",
+            as: "city"
+        }
+    },
+    {
+        $unwind: "$city"
+    },
+    {
+        $addFields: { // adicionar a cidade dentro do address_info
+            address_info: {
+                $mergeObjects: ["$address_info", "$city"]
+            }
+        }
+    },
+    {
+        $lookup: {
+            from: 'country_csv',
+            localField: 'address_info.country_id',
+            foreignField: 'country_id',
+            as: 'country'
+        }
+    },
+    {
+        $unwind: "$country"
+    },
+    {
+        $addFields: { // adicionar o país dentro do address_info
+            address_info: {
+                $mergeObjects: ["$address_info", "$country"]
+            }
+        }
+    },
+    {
+        $project: {
+            _id: 1,
+            customer_id: "$id", // mudar o nome id para customer_id
+            first_name: 1,
+            last_name: 1,
+            email: 1,
+            ative: 1,
+            create_date: 1,
+            gender: 1,
+            birthDate: 1,
+            address_info: {
+                address: 1,
+                address2: 1,
+                district: 1,
+                postal_code: 1,
+                city: 1,
+                country: 1
+            }
+        }
+    }
+])
+
+
+//Guardar os dados organizados dos clientes na coleção "cutomer"
+var bulkInsert = [];
+customers.forEach(function(customer) {
+    bulkInsert.push(customer) // inserir o cliente dentro do array
+});
+// guardar o array todo na coleção "customers" no fim de iterar
+db.customer.insertMany(bulkInsert);
