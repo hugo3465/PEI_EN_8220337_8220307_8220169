@@ -46,6 +46,7 @@ var returns = db.returns_csv.aggregate([
             },
             product: {
                 _id: 1,
+		model: 1, // adicionado após a testageem, pode dar erro aqui
                 brand: 1,
                 categories: 1
             },
