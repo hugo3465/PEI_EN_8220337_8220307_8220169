@@ -1,0 +1,52 @@
+use('BdPeiTP');
+
+// Obter Relatório de vendas para um determinado mês
+var primeiroNomeParceiro = "MARY"; // Substitua pelo nome específico do parceiro
+var ultimoNomeParceiro = "SMITH"
+var ano = 2022; // Substitua pelo ano desejado
+var mes = 03; // Substitua pelo mês desejado (1 para janeiro, 2 para fevereiro, etc.)
+
+db.sales.aggregate([
+    {
+        $match: {
+            "customer.first_name": primeiroNomeParceiro,
+            "customer.last_name": ultimoNomeParceiro,
+            date: {
+                $gte: new Date(ano, mes-1, 0),
+                $lt: new Date(ano, mes, 0)
+            }
+        }
+    },
+    {
+        $unwind: "$sales_lines"
+    },
+    {
+        $group: {
+            _id: "$_id",
+            invoice_id: { $first: "$invoice_id" },
+            date: { $first: "$date" },
+            customer_id: { $first: "$customer.customer_id" },
+            produtos: { $push: "$products_on_sales" },
+            totalVendas: { $sum: "$sales_lines.quantity" },
+            receitaTotal: { $sum: { $multiply: ["$sales_lines.quantity", "$sales_lines.total_with_vat"] } },
+            sales_lines: { $push: "$sales_lines" } // foi preciso fazer o unwind do sales_lines por causa do $sum, mas como vai ser
+                                                    // preciso mostrar este campo como array outra vez, volta-se a unir
+        }
+    },
+    {
+        $project: {
+            _id: 0,
+            invoice_id: 1,
+            date: 1, // data da venda
+            customer_id: 1,
+            totalVendas: 1,
+            receitaTotal: 1,
+            sales_lines: {
+                id: 1,
+                product_id: 1,
+                quantity: 1,
+                total_with_vat: 1
+            }
+        }
+    }
+]);
