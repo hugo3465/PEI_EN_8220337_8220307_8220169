@@ -1,6 +1,6 @@
 /**
  * Pressupostos:
- *  * Ter previamente executado as pipelines dos clientes e dos produtos e vendas
+ *  * Ter previamente executado as pipelines dos clientes, dos produtos e vendas
  */
 use('BdPeiTP');
 

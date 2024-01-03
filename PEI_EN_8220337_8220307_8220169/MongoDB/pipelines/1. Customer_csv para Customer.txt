@@ -1,7 +1,7 @@
 // Base de dados que se vai usar
 use('BdPeiTP');
 
-var customers = db.customer_csv.aggregate([
+db.customer_csv.aggregate([
     {
         $lookup: {
             from: "address_csv",
@@ -69,14 +69,11 @@ var customers = db.customer_csv.aggregate([
                 country: 1
             }
         }
+    },
+    {
+        $out: "customer" // Nome da coleção para onde os resultados serão direcionados
     }
 ])
 
-
-//Guardar os dados organizados dos clientes na coleção "cutomer"
-var bulkInsert = [];
-customers.forEach(function(customer) {
-    bulkInsert.push(customer) // inserir o cliente dentro do array
-});
-// guardar o array todo na coleção "customers" no fim de iterar
-db.customer.insertMany(bulkInsert);
+// cria um índice no customer_id, diz que ele tem deser único, para acelerar as pesquisas
+db.customers.createIndex({ customer_id: 1 }, {unique:true})

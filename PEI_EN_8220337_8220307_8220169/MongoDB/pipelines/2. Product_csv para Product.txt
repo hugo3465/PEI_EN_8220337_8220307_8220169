@@ -1,7 +1,7 @@
 use('BdPeiTP');
 
 // product_csv, sub_category_product_csv, sub_category_csv, category_csv -> para Products
-var prodducts = db.product_csv.aggregate([
+db.product_csv.aggregate([
     {
         $lookup: {
             from: "sub_category_product_csv",
@@ -103,14 +103,11 @@ var prodducts = db.product_csv.aggregate([
             primary_camera: 1,
             categories: 1,        
         }
-    }
+    },
+   {
+       $out: "product" // Nome da coleção para onde os resultados serão direcionados
+   }
 ])
 
-
-var bulkInsert = [];
-products.forEach(function(product) {
-    bulkInsert.push(product) // inserir o produto dentro do array
-});
-
-// guardar o array todo na coleção "products" no fim de iterar
-db.product.insertMany(bulkInsert);
+// cria um índice no product_id, e diz que ele tem de ser único, para acelerar as pesquisas
+db.product.createIndex({ product_id: 1 }, {unique:true})

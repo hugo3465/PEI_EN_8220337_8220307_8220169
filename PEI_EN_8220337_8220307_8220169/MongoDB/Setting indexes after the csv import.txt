@@ -1,0 +1,4 @@
+db.sales_header_csv.createIndex({ customer_id: 1 });
+db.sales_header_csv.createIndex({ invoice_id: 1 });
+
+db.sales_lines_csv.createIndex({ invoice_id: 1 })

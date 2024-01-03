@@ -4,7 +4,7 @@
  */
 use('BdPeiTP');
 
-var sales = db.sales_header_csv.aggregate([
+db.sales_header_csv.aggregate([
     {
         $lookup: {
           from: "customer",
@@ -56,12 +56,14 @@ var sales = db.sales_header_csv.aggregate([
                 categories: 1
             }
         }
+    },
+    {
+       $out: "sales" // Nome da coleção para onde os resultados serão direcionados
     }
 ])
 
-var bulkInsert = [];
-sales.forEach(function(sale) {
-    bulkInsert.push(sale) // inserir a venda dentro do array
-});
-// guardar o array todo na coleção "products" no fim de iterar
-db.sales.insertMany(bulkInsert);
+// cria um índice no invoice_id, e diz que ele tem de ser único, para acelerar as pesquisas
+db.sales.createIndex({ invoice_id: 1 }, {unique:true})
+
+// cria um indice no product_id dentro de cada sale_line, pois ela é um campo bastante pesquisado, mas visto que um produto pode estar em mais que uma sale, este não precisa de ser único
+db.sales.createIndex({"sales_lines.product_id": 1 })
