@@ -24,13 +24,13 @@ db.returns.aggregate([
             daysUntilReturn: {
                 $divide: [
                     { $subtract: ["$date", "$sale.date"] },
-                    1000 * 60 * 60 * 24 // Convert milliseconds to days
+                    1000 * 60 * 60 * 24 // transforma em milisegundos
                 ]
             },
             // Indicador de devolução precoce, isto é, se o produto foi ou não devolvido no prazo de 3 dias após a compra
             earlyReturn: {
                 $cond: {
-                    if: { $lt: ["$date", { $add: ["$sale.date", 3 * 24 * 60 * 60 * 1000] }] },
+                    if: { $lt: ["$date", { $add: ["$sale.date", 3 * 24 * 60 * 60 * 1000] }] }, // transforma em milisegundos
                     then: true,
                     else: false
                 }
