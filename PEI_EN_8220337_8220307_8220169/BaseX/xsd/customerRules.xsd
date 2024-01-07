@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://www.w3.org/2001/XMLSchema/customerRules"
+  targetNamespace="http://www.w3.org/2001/XMLSchema/customertRules">
+
+  <xs:element name="customers">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="name" type="customerType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+<!-- Rules: -->
+  <xs:complexType name="customerType">
+    <xs:sequence>
+      <xs:element name="customer" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="customer_code" type="xs:integer" />
+            <xs:element name="first_name" type="NameType" />
+            <xs:element name="last_name" type="NameType" />
+            <xs:element name="email" type="EmailType" minOccurs="0" />
+            <xs:element name="address">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="country" type="xs:string" />
+                  <xs:element name="city" type="xs:string" />
+                  <xs:element name="postal_code" type="xs:string" />
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="customer_type"  >
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:enumeration value="New"/> <!-- menos de um ano no sistema-->
+                  <xs:enumeration value="Regular"/> <!-- entre 1 e 5 anos no sistema -->
+                  <xs:enumeration value="Premium"/> <!-- mais de 5 anos no sistema -->
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+            <xs:element name="purchases_last_3_years" type="xs:integer"/>
+            <xs:element name="total_purchase_value" type="xs:decimal" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="NameType">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="3" />
+      <xs:maxLength value="30" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="EmailType">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" />
+    </xs:restriction>
+    <xs:default>unknown</xs:default>
+  </xs:simpleType>
+
+</xs:schema>
