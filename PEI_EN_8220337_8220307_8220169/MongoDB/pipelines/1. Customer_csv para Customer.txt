@@ -76,4 +76,10 @@ db.customer_csv.aggregate([
 ])
 
 // cria um índice no customer_id, diz que ele tem deser único, para acelerar as pesquisas
-db.customers.createIndex({ customer_id: 1 }, {unique:true})
+db.customer.createIndex({ customer_id: 1 }, {unique:true});
+
+// apagar as coleções originais
+db.customer_csv.drop();
+db.address_csv.drop();
+db.country_csv.drop();
+db.city_csv.drop();

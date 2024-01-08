@@ -14,9 +14,6 @@ db.sales_header_csv.aggregate([
         }
     },
     {
-        $unwind: "$customer"
-    },
-    {
         $lookup: {
           from: "sales_lines_csv",
           localField: "invoice_id",
@@ -24,6 +21,22 @@ db.sales_header_csv.aggregate([
           as: "sales_lines"
         }
     },
+    	{
+      $addFields: {
+        totalSales: {
+          $sum: "$sales_lines.quantity"
+        },
+        totalRevenue: { // foi preciso o $map, porque o mongo não consegue fazer o multiply num array, e se se fizesse unwind, não haveria memória suficiente para adicionar depois
+                $sum: {
+                    $map: {
+                        input: "$sales_lines",
+                        as: "sl",
+                        in: { $multiply: ["$$sl.quantity", "$$sl.total_with_vat"] }
+                    }
+                }
+            }
+      }
+  	},
     {
         $lookup: {
           from: "product",
@@ -37,6 +50,8 @@ db.sales_header_csv.aggregate([
             _id: 1,
             invoice_id: 1,
             date: 1,
+            totalSales: 1,
+            totalRevenue: 1,
             customer: {
                 _id: 1,
                customer_id: 1,
@@ -60,10 +75,14 @@ db.sales_header_csv.aggregate([
     {
        $out: "sales" // Nome da coleção para onde os resultados serão direcionados
     }
-])
+]);
 
 // cria um índice no invoice_id, e diz que ele tem de ser único, para acelerar as pesquisas
 db.sales.createIndex({ invoice_id: 1 }, {unique:true})
 
 // cria um indice no product_id dentro de cada sale_line, pois ela é um campo bastante pesquisado, mas visto que um produto pode estar em mais que uma sale, este não precisa de ser único
 db.sales.createIndex({"sales_lines.product_id": 1 })
+
+// apaga as coleções originais
+db.sales_header_csv.drop();
+db.sales_lines_csv.drop();

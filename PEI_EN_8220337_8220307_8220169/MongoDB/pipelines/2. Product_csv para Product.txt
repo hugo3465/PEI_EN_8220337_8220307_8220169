@@ -111,3 +111,9 @@ db.product_csv.aggregate([
 
 // cria um índice no product_id, e diz que ele tem de ser único, para acelerar as pesquisas
 db.product.createIndex({ product_id: 1 }, {unique:true})
+
+// apagar as coleções originais
+db.product_csv.drop();
+db.category_csv.drop();
+db.sub_category_csv.drop();
+db.sub_category_product_csv.drop();

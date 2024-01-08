@@ -4,7 +4,7 @@
  */
 use('BdPeiTP');
 
-var returns = db.returns_csv.aggregate([
+db.returns_csv.aggregate([
     {
         $lookup : {
             from : "product", // Nome da tabela que será unida
@@ -28,11 +28,54 @@ var returns = db.returns_csv.aggregate([
         $unwind: "$sale"
     },
     {
+        $lookup : {
+            from : "product", // Nome da tabela que será unida
+            localField : "product_id", // Campo do documento de consulta que será usado para combinar com o campo exportado
+            foreignField : "product_id", // Campo do documento de consulta que será usado para combinar com o campo exportado
+            as: "product"
+        }
+    },
+    {
+        $unwind: "$product"
+    },
+    {
+        $lookup: {
+          from: "sales",
+          localField: "invoice_id",
+          foreignField: "invoice_id",
+          as: "sale"
+        }
+    },
+    {
+        $unwind: "$sale"
+    },
+  	 {
+        $addFields: { // Adicioar o campo daysUntilReturn e earlyReturn
+            // Para cada devolução deverá ser apresentado o número de dias que passaram até à devolução do produto
+            daysUntilReturn: {
+                $divide: [
+                    { $subtract: ["$date", "$sale.date"] },
+                    1000 * 60 * 60 * 24 // transforma em milisegundos
+                ]
+            },
+            // Indicador de devolução precoce, isto é, se o produto foi ou não devolvido no prazo de 3 dias após a compra
+            earlyReturn: {
+                $cond: {
+                    if: { $lt: ["$date", { $add: ["$sale.date", 3 * 24 * 60 * 60 * 1000] }] }, // transforma em milisegundos
+                    then: true,
+                    else: false
+                }
+            }
+        }
+    },
+    {
         $project: {
             _id: 1,
             invoice_id: 1,
             product_id: 1,
             date: 1,
+            daysUntilReturn: 1,
+            earlyReturn:1,
             customer: {
                 _id: "$sale.customer._id",
                 customer_id: "$sale.customer.customer_id",
@@ -55,12 +98,16 @@ var returns = db.returns_csv.aggregate([
                 date: 1
             }
         }
+    },
+    {
+      $out: "returns" // Nome da coleção para onde os resultados serão direcionados
     }
 ])
 
-var bulkInsert = [];
-returns.forEach(function(returnItem) {
-    bulkInsert.push(returnItem) // inserir a devolução dentro do array
-});
-// guardar o array todo na coleção "returns" no fim de iterar
-db.returns.insertMany(bulkInsert);
+// criar índices
+db.returns.createIndex({"invoice_id": 1 })
+db.returns.createIndex({"product_id": 1 })
+db.returns.createIndex({"customer.customer_id": 1 })
+
+// apaga as coleções originais
+db.returns_csv.drop();

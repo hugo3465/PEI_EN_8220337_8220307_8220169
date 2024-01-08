@@ -1,8 +1,8 @@
 // criar a base de dados
-use BdPeiTP
+use BdPeiTP;
 
 // criar coleções para armazenar o conteúdo dos ficheiros CSV, estas coleções serão eliminadas após o seu conteúdo ser transferido para as coleções finais
-db.createCollection("addres_csv");
+db.createCollection("address_csv");
 db.createCollection("category_csv");
 db.createCollection("city_csv");
 db.createCollection("country_csv");
@@ -13,16 +13,6 @@ db.createCollection("sales_header_csv");
 db.createCollection("sales_lines_csv");
 db.createCollection("sub_category_csv");
 db.createCollection("sub_category_product_csv");
-
-
-/**
-*	acho que estas coleções não são precisasm pois quando se for inserir coisas na coleção, o mongoDB vai criá-la caso ela não exista
-*/
-// Create collections for storing content from the CSV collections, but optimized for MongoDB
-db.createCollection("customer");
-db.createCollection("product");
-db.createCollection("returns");
-db.createCollection("sales");
 
 
 /**
