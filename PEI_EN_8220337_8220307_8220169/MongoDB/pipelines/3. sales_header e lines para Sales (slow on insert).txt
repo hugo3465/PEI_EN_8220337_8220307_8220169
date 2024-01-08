@@ -1,3 +1,4 @@
+
 /**
  * Pressupostos:
  *  * Ter previamente executado as pipelines dos clientes e dos produtos
@@ -12,6 +13,9 @@ db.sales_header_csv.aggregate([
           foreignField: "customer_id",
           as: "customer"
         }
+    },
+    {
+      $unwind: "$customer"
     },
     {
         $lookup: {
