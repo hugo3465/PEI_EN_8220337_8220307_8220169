@@ -1,25 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns="http://www.w3.org/2001/XMLSchema/productRules"
-    targetNamespace="http://www.w3.org/2001/XMLSchema/productRules">
+    targetNamespace="http://www.w3.org/2001/XMLSchema/productRules"
+    xmlns:pr="http://www.w3.org/2001/XMLSchema/productRules">
 
-
-    <xs:simpleType name="typeNome">
-        <xs:restriction base="xs:string">
-            <xs:minLength value="3" />
-            <xs:maxLength value="10" />
-        </xs:restriction>
-    </xs:simpleType>
 
     <xs:element name="products">
         <xs:complexType>
+            <xs:sequence>
+                <xs:element name="name" type="productType"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!--Rules-->
+    <xs:complexType name="productType">
             <xs:sequence>
                 <xs:element name="product" maxOccurs="unbounded">
                     <xs:complexType>
                         <xs:sequence>
                             <xs:element name="product_code" type="xs:string" />
-                            <xs:element name="brand" type="typeNome" />
-                            <xs:element name="model" type="typeNome" />
+                            <xs:element name="brand" type="NameType" />
+                            <xs:element name="model" type="NameType" />
                             <xs:element name="current_price" type="xs:decimal" />
                             <xs:element name="category">
                                 <xs:complexType>
@@ -87,5 +89,11 @@
                 </xs:element>
             </xs:sequence>
         </xs:complexType>
-    </xs:element>
+    
+    <xs:simpleType name="NameType">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="3" />
+            <xs:maxLength value="10" />
+        </xs:restriction>
+    </xs:simpleType>
 </xs:schema>
