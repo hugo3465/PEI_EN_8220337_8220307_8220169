@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    targetNamespace="http://www.w3.org/2001/XMLSchema/returnRules"
-    xmlns:p="http://www.w3.org/2001/XMLSchema/productRules"
+    targetNamespace="http://www.example.com/returnRules"
+    xmlns:pr="http://www.w3.org/2001/XMLSchema/productRules"
     xmlns:c="http://www.w3.org/2001/XMLSchema/clientRules"
-    xmlns:s="http://www.w3.org/2001/XMLSchema/saleRules"
-    xmlns:r="http://www.w3.org/2001/XMLSchema/returnRules">
+    xmlns:sr="http://www.w3.org/2001/XMLSchema/saleRules"
+    xmlns:r="http://www.example.com/returnRules">
 
-    <xs:import namespace="http://www.w3.org/2001/XMLSchema/clientRules" schemaLocation="clientRules.xsd" />
+    <xs:import namespace="http://www.w3.org/2001/XMLSchema/customerRules" schemaLocation="customerRules.xsd" />
     <xs:import namespace="http://www.w3.org/2001/XMLSchema/productRules" schemaLocation="productRules.xsd" />
     <xs:import namespace="http://www.w3.org/2001/XMLSchema/saleRules" schemaLocation="saleRules.xsd" />
-
+    
     <xs:complexType name="generalInformationType">
         <xs:sequence>
             <xs:element name="nif" type="xs:string" />
@@ -21,9 +21,9 @@
     </xs:complexType>
 
     <xs:element name="general_information" type="r:generalInformationType" />
-    <xs:element name="client" type="c:customers" />
-    <xs:element name="products" type="p:products" />
-    <xs:element name="sales" type="s:sales" />
-    <xs:element name="summary_sales" type="s:summary_sales" />
+    <xs:element name="customer" type="c:customers" />
+    <xs:element name="products" type="pr:products"/>
+    <xs:element name="sales" type="sr:sales" />
+    <xs:element name="summary_sales" type="sr:summary_sales" />
 
 </xs:schema>

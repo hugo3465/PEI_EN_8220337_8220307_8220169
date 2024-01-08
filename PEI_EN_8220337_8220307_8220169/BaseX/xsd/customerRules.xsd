@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
   xmlns="http://www.w3.org/2001/XMLSchema/customerRules"
-  targetNamespace="http://www.w3.org/2001/XMLSchema/customertRules">
+  targetNamespace="http://www.w3.org/2001/XMLSchema/customerRules"
+  xmlns:c="http://www.w3.org/2001/XMLSchema/customerRules">
 
   <xs:element name="customers">
     <xs:complexType>
@@ -20,7 +21,7 @@
             <xs:element name="customer_code" type="xs:integer" />
             <xs:element name="first_name" type="NameType" />
             <xs:element name="last_name" type="NameType" />
-            <xs:element name="email" type="EmailType" minOccurs="0" />
+            <xs:element name="email" type="EmailType" minOccurs="1" maxOccurs="1"/>
             <xs:element name="address">
               <xs:complexType>
                 <xs:sequence>
@@ -54,11 +55,24 @@
     </xs:restriction>
   </xs:simpleType>
 
+  <!--<xs:simpleType name="EmailType">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" />
+      <xs:default>unknown</xs:default>
+    </xs:restriction>
+  </xs:simpleType>-->
+  
   <xs:simpleType name="EmailType">
+    <xs:annotation>
+      <xs:appinfo>
+        <defaultValue>unknown</defaultValue>
+      </xs:appinfo>
+    </xs:annotation>
     <xs:restriction base="xs:string">
       <xs:pattern value="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" />
     </xs:restriction>
-    <xs:default>unknown</xs:default>
   </xs:simpleType>
+  
+  
 
 </xs:schema>
