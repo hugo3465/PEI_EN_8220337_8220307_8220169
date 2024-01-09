@@ -18,12 +18,18 @@ declare
 function page:getSale($ano as xs:integer, $mes as xs:integer) {
   let $xsd := "./xsd/saleRules.xsd"
   (: validate:xsd($sale, $xsd) :)
-  return page:getSalesRawData($ano, $mes)
+  let $xml := page:getSalesRawData($ano, $mes)
+  let $parsedXml := page:transformSalesXML($xml)
+  
+  return $parsedXml
 };
 
 declare function page:getSalesRawData($ano as xs:integer, $mes as xs:integer) {
-  let $url := "https://eu-west-2.aws.data.mongodb-api.com/app/data-krpco/endpoint/data/v1/action/findOne"
-  let $findSuffix := "/action/findOne"
+  let $rightMes := fn:format-number($mes, "00") (: com isto não vai ignorar o 0 caso o mes seja 03 :)
+  let $rightProximoMes := fn:format-number($mes + 1, "00")
+
+  let $url := "https://eu-west-2.aws.data.mongodb-api.com/app/data-krpco/endpoint/data/v1"
+  let $findSuffix := "/action/find"
   let $apiKey := "suGjpm3S5Uue7H3sCuTLlKKxPBsWmXI8gf9x7Qx0yXegqquTrnNvuXo21SrXthBb"
   let $contentType := "application/json"
   let $body := concat('{
@@ -33,8 +39,8 @@ declare function page:getSalesRawData($ano as xs:integer, $mes as xs:integer) {
 
         "filter": {
             "date": {
-                "$gte": {"$date": "', $ano, '-', $mes, '-01T00:00:00Z"},
-                "$lt": {"$date": "', $ano, '-', $mes + 1, '-01T00:00:00Z"}
+                "$gte": {"$date": "', $ano, '-', $rightMes, '-01T00:00:00Z"},
+                "$lt": {"$date": "', $ano, '-', $rightProximoMes, '-01T00:00:00Z"}
             }
         },
         "projection": {
@@ -64,13 +70,31 @@ declare function page:getSalesRawData($ano as xs:integer, $mes as xs:integer) {
   return $httpResponse
 };
 
-
-(: Obter relatório de devoluçções de um mês :)
-declare
- %rest:path("/getReturn?ano={$ano},mes={$mes}")
- %rest:GET
-function page:getReturn($ano as xs:int, $mes as xs:int) {
-  let $xsd := "./xsd/saleRules.xsd"
-  (:if(validate:xsd($sale, $xsd)):)
-  return 0
+declare function page:transformSalesXML($xml) {
+  (: aparentemente não é preciso return com funções assim:)
+    <sales>
+    {
+      for $sale in $xml/json/documents/*
+      return (
+        <sale>
+          {$sale/invoice__id},
+          {$sale/date}
+          <sales_lines>
+          {
+            for $saleLine in $sale/sales__lines/*
+            return (
+              <sale_line>
+                {$saleLine/id}
+                {$saleLine/total__with__vat},
+                {$saleLine/quantity},
+                {$saleLine/product__id}
+              </sale_line>
+            )
+          }
+          </sales_lines>
+        </sale>
+      )
+      
+    }
+   </sales>
 };
