@@ -1,5 +1,7 @@
 module namespace page = 'http://basex.org/examples/web-page';
 
+(:declare default element namespace 'http://www.trabalhoPEI.pt/returnRules';:) (: Para o xsd:)
+
 (: Obter relatório de devoluçções de um mês :)
 declare
  %rest:path("/returns")
@@ -8,7 +10,6 @@ declare
  %rest:GET
 function page:getReturn($ano as xs:int, $mes as xs:int) {
   let $xsd := "./xsd/saleRules.xsd"
-  (:if(validate:xsd($sale, $xsd)):)
   
   let $xml := page:getReturnsRawData($ano, $mes)
   let $parsedXml := page:transformReturnsXML($xml)
@@ -63,9 +64,17 @@ declare function page:transformReturnsXML($xml) {
         {$return/earlyReturn},
         {$return/date},
         {$return/sale},
-        {$return/customer},
+        <customer>
+          {$return/customer/customer__id},
+          {$return/customer/first__name},
+          {$return/customer/last__name},
+          <address__info>
+            {$return/customer/address__info/country},
+            {$return/customer/address__info/city},
+            {$return/customer/address__info/postal__code}
+          </address__info>
+        </customer>,
         <product>
-          {$return/product/__id},
           {$return/product/brand},
           {$return/product/model},
           {

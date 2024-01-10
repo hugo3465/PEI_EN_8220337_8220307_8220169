@@ -1,6 +1,8 @@
 module namespace page = 'http://basex.org/examples/web-page';
 declare namespace salesModule = 'http://example.com/sales-module';
 
+(:declare default element namespace 'http://www.trabalhoPEI.pt/salesRules';:) (: Para o xsd:)
+
 (: Globas variables:)
 (:
 declare variable $url := "https://eu-west-2.aws.data.mongodb-api.com/app/data-krpco/endpoint/data/v1/action/findOne";
@@ -26,8 +28,8 @@ function page:getSale($ano as xs:integer, $mes as xs:integer) {
 
 declare function page:getSalesRawData($ano as xs:integer, $mes as xs:integer) {
   let $rightMes := fn:format-number($mes, "00") (: com isto não vai ignorar o 0 caso o mes seja 03 :)
+  
   let $rightProximoMes := fn:format-number($mes + 1, "00")
-
   let $url := "https://eu-west-2.aws.data.mongodb-api.com/app/data-krpco/endpoint/data/v1"
   let $findSuffix := "/action/find"
   let $apiKey := "suGjpm3S5Uue7H3sCuTLlKKxPBsWmXI8gf9x7Qx0yXegqquTrnNvuXo21SrXthBb"
