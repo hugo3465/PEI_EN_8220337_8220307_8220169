@@ -11,7 +11,7 @@ declare variable $contentType := "application/json";
 
 (: Obter relatório de vendas de um mês :)
 declare
- %rest:path("/getSale")
+ %rest:path("/sales")
  %rest:query-param("ano", "{$ano}")
  %rest:query-param("mes", "{$mes}")
  %rest:GET
