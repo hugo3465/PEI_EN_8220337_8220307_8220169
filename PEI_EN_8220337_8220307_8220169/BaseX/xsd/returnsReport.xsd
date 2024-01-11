@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+    targetNamespace="http://www.example.com/returnsReport"
+    xmlns:pr="http://www.w3.org/2001/XMLSchema/productRules"
+    xmlns:c="http://www.w3.org/2001/XMLSchema/customerRules"
+    xmlns:sr="http://www.w3.org/2001/XMLSchema/saleRules"
+    xmlns:r="http://www.w3.org/2001/XMLSchema/returnRules">
+    
+    <xs:import namespace="http://www.w3.org/2001/XMLSchema/customerRules" schemaLocation="./Rules/customerRules.xsd" />
+    <xs:import namespace="http://www.w3.org/2001/XMLSchema/productRules" schemaLocation="./Rules/productRules.xsd" />
+    <xs:import namespace="http://www.w3.org/2001/XMLSchema/saleRules" schemaLocation="./Rules/saleRules.xsd" />
+    <xs:import namespace="http://www.w3.org/2001/XMLSchema/returnRules" schemaLocation="./Rules/returnRules.xsd"></xs:import>
+    
+        
+        <xs:element name="returns">
+            <xs:complexType>
+                <xs:sequence>
+                    <xs:element name="return" maxOccurs="unbounded">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="invoice_id" type="xs:string"/>
+                                <xs:element name="product_id" type="xs:string"/>
+                                <xs:element name="daysUntilReturn" type="xs:integer"/>
+                                <xs:element name="earlyReturn" type="xs:boolean"/>
+                                <xs:element name="date" type="xs:dateTime"/>
+                                
+                                <xs:element name="sale" type="sr:saleSimpleType"/>
+                                <xs:element name="customer" type="c:customerSimpleType"/>
+                                <xs:element name="product" type="pr:productSimpleType"/>
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:element>
+        
+</xs:schema>
+
+

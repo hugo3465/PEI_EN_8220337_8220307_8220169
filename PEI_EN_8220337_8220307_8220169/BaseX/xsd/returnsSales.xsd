@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+    targetNamespace="http://www.w3.org/2001/XMLSchemareturnsSales"
+    xmlns:sr="http://www.w3.org/2001/XMLSchema/saleRules"> 
+    
+    <xs:import namespace="http://www.w3.org/2001/XMLSchema/saleRules" schemaLocation="./Rules/saleRules.xsd" />
+    
+    <xs:element name="sales" type="sr:salesType"/>
+
+</xs:schema>

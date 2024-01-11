@@ -3,21 +3,30 @@
   xmlns="http://www.w3.org/2001/XMLSchema/customerRules"
   targetNamespace="http://www.w3.org/2001/XMLSchema/customerRules">
 
-  <xs:element name="customers">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element name="name" type="customerType"/>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  
-<!-- Rules: -->
+
+  <xs:complexType name="customerSimpleType">
+    <xs:sequence>
+      <xs:element name="customer_id" type="xs:integer" />
+      <xs:element name="first_name" type="NameType" />
+      <xs:element name="last_name" type="NameType" />
+      <xs:element name="address_info">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="country" type="xs:string"/>
+            <xs:element name="city" type="xs:string"/>
+            <xs:element name="address_info" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
   <xs:complexType name="customerType">
     <xs:sequence>
       <xs:element name="customer" maxOccurs="unbounded">
         <xs:complexType>
           <xs:sequence>
-            <xs:element name="customer_code" type="xs:integer" />
+            <xs:element name="customer_id" type="xs:integer" />
             <xs:element name="first_name" type="NameType" />
             <xs:element name="last_name" type="NameType" />
             <xs:element name="email" type="EmailType" minOccurs="1" maxOccurs="1"/>

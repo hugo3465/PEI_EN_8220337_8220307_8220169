@@ -5,6 +5,21 @@
     xmlns:pr="http://www.w3.org/2001/XMLSchema/productRules">
 
 
+    <xs:complexType name="productSimpleType">
+        <xs:sequence>
+            <xs:element name="brand" type="xs:string"/>
+            <xs:element name="model" type="xs:string"/>
+            <xs:element name="category" minOccurs="1" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="name" type="xs:string"/>
+                        <xs:element name="sub_category" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
     <xs:element name="products">
         <xs:complexType>
             <xs:sequence>

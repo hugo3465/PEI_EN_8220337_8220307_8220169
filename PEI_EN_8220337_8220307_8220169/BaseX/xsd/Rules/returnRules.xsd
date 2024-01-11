@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    targetNamespace="http://www.example.com/returnRules"
+    xmlns="http://www.w3.org/2001/XMLSchema/returnRules"
+    targetNamespace="http://www.w3.org/2001/XMLSchema/returnRules"
     xmlns:pr="http://www.w3.org/2001/XMLSchema/productRules"
     xmlns:c="http://www.w3.org/2001/XMLSchema/customerRules"
     xmlns:sr="http://www.w3.org/2001/XMLSchema/saleRules"
-    xmlns:r="http://www.example.com/returnRules">
+    xmlns:r="http://www.w3.org/2001/XMLSchema/returnRules">
 
     <xs:import namespace="http://www.w3.org/2001/XMLSchema/customerRules" schemaLocation="customerRules.xsd" />
     <xs:import namespace="http://www.w3.org/2001/XMLSchema/productRules" schemaLocation="productRules.xsd" />
@@ -20,10 +21,12 @@
         </xs:sequence>
     </xs:complexType>
 
-    <xs:element name="general_information" type="r:generalInformationType" />
+    <!--<xs:element name="general_information" type="r:generalInformationType" />
     <xs:element name="customer" type="c:customerType" />
     <xs:element name="products" type="pr:productType"/>
     <xs:element name="sales" type="sr:salesType" />
-    <xs:element name="summary_sales" type="sr:summarySalesType" />
+    <xs:element name="summary_sales" type="sr:summarySalesType" />-->
+    
+    
 
 </xs:schema>

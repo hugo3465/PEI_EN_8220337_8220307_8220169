@@ -3,47 +3,43 @@
     xmlns="http://www.w3.org/2001/XMLSchema/saleRules"
     targetNamespace="http://www.w3.org/2001/XMLSchema/saleRules"
     xmlns:sr="http://www.w3.org/2001/XMLSchema/saleRules">
+ 
+    <xs:complexType name="saleSimpleType">
+        <xs:sequence>
+            <xs:element name="invoice_id" type="xs:integer"/>
+            <xs:element name="date" type="xs:dateTime"/>
+        </xs:sequence>
+    </xs:complexType>
+ 
+ 
+    <xs:complexType name="salesType">
+        <xs:sequence>
+            <xs:element name="sale" type="saleType" minOccurs="1" maxOccurs="unbounded"></xs:element>
+        </xs:sequence>
+    </xs:complexType>
 
-    <xs:element name="sales">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element name="name" type="salesType"/>
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
-
-        <xs:complexType name="salesType">
-            <xs:sequence>
-                <xs:element name="sale" maxOccurs="unbounded">
-                    <xs:complexType>
-                        <xs:sequence>
-                            <xs:element name="invoice_code" type="xs:string" />
-                            <xs:element name="sale_date" type="dataType" />
-                            <xs:element name="customer_code" type="xs:string" />
-                            <xs:element name="total_sale_value" type="xs:decimal" />
-                            <xs:element name="sale_lines">
-                                <xs:complexType>
-                                    <xs:sequence>
-                                        <xs:element name="sale_line" maxOccurs="unbounded">
-                                            <xs:complexType>
-                                                <xs:sequence>
-                                                    <xs:element name="line_number" type="xs:integer" />
-                                                    <xs:element name="product_code" type="xs:string" />
-                                                    <xs:element name="quantity_sold"
-                                                        type="xs:integer" />
-                                                    <xs:element name="total_line_value"
-                                                        type="xs:decimal" />
-                                                </xs:sequence>
-                                            </xs:complexType>
-                                        </xs:element>
-                                    </xs:sequence>
-                                </xs:complexType>
-                            </xs:element>
-                        </xs:sequence>
-                    </xs:complexType>
-                </xs:element>
-            </xs:sequence>
-        </xs:complexType>
+    <xs:complexType name="saleType">
+        <xs:sequence>
+            <xs:element name="invoice_id" type="xs:integer"/>
+            <xs:element name="date" type="xs:date"/>
+            <xs:element name="sales_lines">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="sale_line" minOccurs="1" maxOccurs="unbounded">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="id" type="xs:integer"/>
+                                    <xs:element name="total_with_vat" type="xs:decimal"/>
+                                    <xs:element name="quantity" type="xs:integer"/>
+                                    <xs:element name="product_id" type="xs:integer"/>
+                                </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
     
     <xs:element name="summary_sales">
         <xs:complexType>
@@ -130,3 +126,7 @@
     </xs:simpleType>
 
 </xs:schema>
+
+
+
+
