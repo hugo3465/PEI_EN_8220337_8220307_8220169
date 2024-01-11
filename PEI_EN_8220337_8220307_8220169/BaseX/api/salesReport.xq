@@ -29,7 +29,16 @@ function page:getSale($ano as xs:integer, $mes as xs:integer) {
 declare function page:getSalesRawData($ano as xs:integer, $mes as xs:integer) {
   let $rightMes := fn:format-number($mes, "00") (: com isto não vai ignorar o 0 caso o mes seja 03 :)
   
-  let $rightProximoMes := fn:format-number($mes + 1, "00")
+  let $rightProximoMes :=
+    if ($mes eq 12) (: se mes for iguala 12 volta a um:)
+    then fn:format-number(1, "00")
+    else fn:format-number($mes + 1, "00")
+  
+  let $nextYear := (: se mes igual a 12 incrementa o ano 1:)
+    if ($mes eq 12)
+    then $ano + 1
+    else $ano
+    
   let $url := "https://eu-west-2.aws.data.mongodb-api.com/app/data-krpco/endpoint/data/v1"
   let $findSuffix := "/action/find"
   let $apiKey := "suGjpm3S5Uue7H3sCuTLlKKxPBsWmXI8gf9x7Qx0yXegqquTrnNvuXo21SrXthBb"
@@ -42,7 +51,7 @@ declare function page:getSalesRawData($ano as xs:integer, $mes as xs:integer) {
         "filter": {
             "date": {
                 "$gte": {"$date": "', $ano, '-', $rightMes, '-01T00:00:00Z"},
-                "$lt": {"$date": "', $ano, '-', $rightProximoMes, '-01T00:00:00Z"}
+                "$lt": {"$date": "', $nextYear, '-', $rightProximoMes, '-01T00:00:00Z"}
             }
         },
         "projection": {
