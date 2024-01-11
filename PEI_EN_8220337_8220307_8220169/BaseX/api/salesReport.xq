@@ -79,7 +79,7 @@ declare function page:transformSalesXML($xml) {
       for $sale in $xml/json/documents/*
       return (
         <sale>
-          {$sale/invoice__id},
+          <invoice_id>{$sale/invoice__id/text()},</invoice_id>
           {$sale/date}
           <sales_lines>
           {
@@ -87,9 +87,9 @@ declare function page:transformSalesXML($xml) {
             return (
               <sale_line>
                 {$saleLine/id}
-                {$saleLine/total__with__vat},
+                <total_with_vat>{$saleLine/total__with__vat/text()},</total_with_vat>
                 {$saleLine/quantity},
-                {$saleLine/product__id}
+                <product_id>{$saleLine/product__id/text()}</product_id>
               </sale_line>
             )
           }

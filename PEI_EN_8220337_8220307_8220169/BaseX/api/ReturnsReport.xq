@@ -58,21 +58,21 @@ declare function page:transformReturnsXML($xml) {
     for $return in $xml/json/documents/*
     return (
       <return>
-        {$return/invoice__id},
-        {$return/product__id},
+        <invoice_id>{$return/invoice__id/text()},</invoice_id>
+        <product_id>{$return/product__id/text()}, </product_id>
         {$return/daysUntilReturn},
         {$return/earlyReturn},
         {$return/date},
         {$return/sale},
         <customer>
-          {$return/customer/customer__id},
-          {$return/customer/first__name},
-          {$return/customer/last__name},
-          <address__info>
+          <customer_id>{$return/customer/customer__id/text()},</customer_id>
+          <first_name>{$return/customer/first__name/text()},</first_name>
+          <last_name>{$return/customer/last__name/text()},</last_name>
+          <address_info>
             {$return/customer/address__info/country},
             {$return/customer/address__info/city},
-            {$return/customer/address__info/postal__code}
-          </address__info>
+            <address_info>{$return/customer/address__info/postal__code/text()}</address_info>
+          </address_info>
         </customer>,
         <product>
           {$return/product/brand},
@@ -85,7 +85,7 @@ declare function page:transformReturnsXML($xml) {
                 {
                   for $subCategory in $category/sub__categories/*
                   return
-                    <sub__category>{$subCategory/text()}</sub__category>
+                    <sub_category>{$subCategory/text()}</sub_category>
                 }
               </category>
           }
