@@ -14,6 +14,10 @@ function page:getReturn($ano as xs:int, $mes as xs:int) {
   let $xml := page:getReturnsRawData($ano, $mes)
   let $parsedXml := page:transformReturnsXML($xml)
   
+  let $xsd := "xsd/returnsReport.xsd"
+  (: validate:xsd($parsedXml, $xsd) :)
+
+  
   return $parsedXml
 };
 
@@ -67,25 +71,28 @@ declare function page:transformReturnsXML($xml) {
     for $return in $xml/json/documents/*
     return (
       <return>
-        <invoice_id>{$return/invoice__id/text()},</invoice_id>
-        <product_id>{$return/product__id/text()}, </product_id>
-        {$return/daysUntilReturn},
-        {$return/earlyReturn},
-        {$return/date},
-        {$return/sale},
+        <invoice_id>{$return/invoice__id/text()}</invoice_id>
+        <product_id>{$return/product__id/text()} </product_id>
+        {$return/daysUntilReturn}
+        {$return/earlyReturn}
+        {$return/date}
+        <sale>
+          <invoice_id>{$return/sale/invoice__id/text()}</invoice_id>
+          {$return/sale/date}
+        </sale>
         <customer>
-          <customer_id>{$return/customer/customer__id/text()},</customer_id>
-          <first_name>{$return/customer/first__name/text()},</first_name>
-          <last_name>{$return/customer/last__name/text()},</last_name>
+          <customer_id>{$return/customer/customer__id/text()}</customer_id>
+          <first_name>{$return/customer/first__name/text()}</first_name>
+          <last_name>{$return/customer/last__name/text()}</last_name>
           <address_info>
-            {$return/customer/address__info/country},
-            {$return/customer/address__info/city},
+            {$return/customer/address__info/country}
+            {$return/customer/address__info/city}
             <address_info>{$return/customer/address__info/postal__code/text()}</address_info>
           </address_info>
-        </customer>,
+        </customer>
         <product>
-          {$return/product/brand},
-          {$return/product/model},
+          {$return/product/brand}
+          {$return/product/model}
           {
             for $category in $return/product/categories/*
             return

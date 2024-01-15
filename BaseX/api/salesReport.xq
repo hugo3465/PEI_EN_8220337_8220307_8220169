@@ -15,13 +15,17 @@ declare variable $contentType := "application/json";
 declare
  %rest:path("/sales")
  %rest:query-param("ano", "{$ano}")
- %rest:query-param("mes", "{$mes}")
+ %rest:query-param("mes", "{$mes}")	
  %rest:GET
 function page:getSale($ano as xs:integer, $mes as xs:integer) {
   let $xsd := "./xsd/saleRules.xsd"
-  (: validate:xsd($sale, $xsd) :)
+
   let $xml := page:getSalesRawData($ano, $mes)
   let $parsedXml := page:transformSalesXML($xml)
+  
+  let $xsd := "xsd/SalesReport.xsd"
+  
+  (: validate:xsd($parsedXml, $xsd) :)
   
   return $parsedXml
 };
@@ -88,7 +92,7 @@ declare function page:transformSalesXML($xml) {
       for $sale in $xml/json/documents/*
       return (
         <sale>
-          <invoice_id>{$sale/invoice__id/text()},</invoice_id>
+          <invoice_id>{$sale/invoice__id/text()}</invoice_id>
           {$sale/date}
           <sales_lines>
           {
@@ -96,8 +100,8 @@ declare function page:transformSalesXML($xml) {
             return (
               <sale_line>
                 {$saleLine/id}
-                <total_with_vat>{$saleLine/total__with__vat/text()},</total_with_vat>
-                {$saleLine/quantity},
+                <total_with_vat>{$saleLine/total__with__vat/text()}</total_with_vat>
+                {$saleLine/quantity}
                 <product_id>{$saleLine/product__id/text()}</product_id>
               </sale_line>
             )

@@ -13,9 +13,7 @@
  
  
     <xs:complexType name="salesType">
-        <xs:sequence>
-            <xs:element name="sale" type="saleType" minOccurs="1" maxOccurs="unbounded"></xs:element>
-        </xs:sequence>
+        <xs:element name="sale" type="saleType" minOccurs="1" maxOccurs="unbounded" />
     </xs:complexType>
 
     <xs:complexType name="saleType">
