@@ -1,0 +1,39 @@
+// Para criar o campo customer_type nos clinetes
+db.customer.aggregate([
+  {
+    $addFields: {
+      customer_type: {
+        $switch: {
+          branches: [
+            {
+              case: { $lt: ["$data_registo", "$$NOW"] },
+              then: "New"
+            },
+            {
+              case: {
+                $and: [
+                  {
+                    $gte: [
+                      "$data_registo",
+                      { $subtract: ["$$NOW", 365 * 24 * 60 * 60 * 1000] } // One year ago
+                    ]
+                  },
+                  { $lt: ["$data_registo", "$$NOW"] }
+                ]
+              },
+              then: "Regular"
+            },
+            {
+              case: { $gte: ["$data_registo", { $subtract: ["$$NOW", 5 * 365 * 24 * 60 * 60 * 1000] }] }, // More than 5 years ago
+              then: "premium"
+            }
+          ],
+          default: "Undifined"
+        }
+      }
+    }
+  },
+  {
+    $out: "customer"
+  }
+])
